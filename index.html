@@ -1,30 +1,130 @@
-
-<!DOCTYPE HTML>
-<html>
-<head>
-<title>A Very Simple Page</title>
-</head>
-<body>
-<h1>Welcome to XXX Website</h1>
-<img src="images/Profile.jpeg" width="240" height="300" alt="my photo" />
-<hr>
-<h2>About Me</h2>
-<p>I am a very imaginative person. <br>
-I dream day and night. Wanna to talk to me, got to wake me up</p>
-<h2>My School</h2>
-<p>I am currently study at <a href="http://www.nyp.edu.sg"> Secondary School </a> </p>
-<p>There are 4 subjects I study in School</p>
-<ol>
-<li>English</li>
-<li>Math</li>
-<li>Science</li>
-<li>History</li>
-
-</ol>
-<p>I am learning how to make a website using html tags and javascript.</p>
-<p>I create a game at <a href="guessImages.html">Guess the image</a> </p>
-<p>xxx copyright &copy;</p>
-</body>
+<!-- This is the doctype declaration, it tells the browser that this is an HTML5 document -->
+<!DOCTYPE html>
+<!-- The <html> tag is the root element of an HTML page -->
+<html lang="en">
+  <!-- The <head> section contains meta-information about the document -->
+  <head>
+    <!-- The <meta> tag specifies the character encoding for the HTML document -->
+    <meta charset="UTF-8"/>
+    <!-- The <style> tag contains CSS styles for the HTML elements -->
+    <style>
+      /* The #wrapper ID sets the width, height, and margin for the wrapper div  */
+      #wrapper {
+        width:1000px;
+        height:auto;
+        margin:auto;
+      }
+      /* The #imageDiv p ID centers the text inside the imageDiv paragraphs  */
+      #imageDiv p {
+        text-align:center;
+      }
+      <!-- The #imageDiv ul ID removes the default list style for the unordered list -->
+      #imageDiv ul {
+        list-style-type:none;
+      }
+      <!-- The #imageDiv ul li ID styles the list items inside the unordered list -->
+      #imageDiv ul li {
+        float:left;
+        display:inline-block;
+        height:180px;
+        border:4px solid black;
+        margin:10px;
+      }
+      <!-- The #theImage ID sets the width, height, and margin for the image element -->
+      #theImage {
+        width:250px;
+        height:250px;
+        display:block;
+        margin:auto;
+      }
+      <!-- The #question ID hides the question div initially -->
+      #question {
+        display:none;
+      }
+    </style>
+    <!-- The <script> tag contains JavaScript code for the webpage -->
+    <script>
+      // Array of image file paths -->
+      var images=["images/friendshipBear.jpg","images/basketBear.jpg","images/gentlemanBear.jpg","images/ladyBear.jpg",
+      "images/panda.jpg","images/snowBear.jpg"];
+      // Array of image names -->
+      var nameOfImages=["friendshipBear","basketBear","gentlemanBear","ladyBear","panda","snowBear"];
+      // Array to count the number of times each image is shown -->
+      var counter=[0,0,0,0,0,0];
+      var targetIndex;
+      var timer1,timer2;
+      var lastIndex=0;
+      //Function to randomly display images 
+      function flashImages(){
+        var index=Math.floor(Math.random()*1000)%images.length;
+        if (lastIndex==index) {
+          if (index<images.length-1) 
+            index++;
+          else 
+            index=0;
+        }
+        lastIndex=index;
+        counter[index]++;
+        document.getElementById("clue").innerHTML=counter;
+        document.getElementById("theImage").src="images/"+nameOfImages[index]+".jpg";
+      }
+      // Function to start the game -->
+      function startGame(){
+        counter=[0,0,0,0,0,0];
+        document.getElementById("question").style.display="none";
+        document.getElementById("answer").value=0;
+        timer1=setInterval("flashImages()",400);
+        timer2=setTimeout("stopFlash()",2800);
+      }
+      // Function to stop flashing images and display the question -->
+      function stopFlash() {
+        clearInterval(timer1);
+        clearTimeout(timer2);
+        targetIndex=Math.floor(Math.random()*1000)%images.length;
+        document.getElementById("theImage").src="images/blank.png";
+        document.getElementById("targetPic").innerHTML=nameOfImages[targetIndex];
+        document.getElementById("question").style.display="block";
+      }
+      // Function to check the user's answer -->
+      function checkAnswer(){
+        guess=document.getElementById("answer").value;
+        if (guess==counter[targetIndex]) {
+          alert("You Got It!!");
+        }
+        else {
+          alert("Oops try again!");
+        }
+      }
+    </script>
+  </head>
+  <!-- The <body> section contains the content of the webpage -->
+  <body>
+    <!-- The wrapper div contains all the content of the game -->
+    <div id="wrapper">
+      <!-- The clue div displays the counter array -->
+      <div id="clue"></div>
+      <!-- The imageDiv div contains the list of images -->
+      <div id="imageDiv">
+        <ul>
+          <!-- Each list item contains an image and a caption -->
+          <li><img src="images/friendshipBear.jpg" title="friendshipBear"/><p>FriendShipBear</p></li>
+          <li><img src="images/basketBear.jpg" title="basketBear"/><p>basketBear</p></li>
+          <li><img src="images/gentlemanBear.jpg" title="gentlemanBear" /><p>gentlemanBear</p></li>
+          <li><img src="images/ladyBear.jpg" title="ladyBear" /><p>ladyBear</p></li>
+          <li><img src="images/panda.jpg" title="panda" /><p>panda</p></li>
+          <li><img src="images/snowBear.jpg" title="snowBear" /><p>snowBear</p></li>
+        </ul>
+      </div>
+      <!-- The image element that displays the flashing images -->
+      <img id="theImage" src="images/blank.png" alt=""/>
+      <!-- The button to start the game -->
+      <input type="button" value="Start" onclick="startGame();"/>
+      <!-- The question div contains the question and answer input -->
+      <div id="question">
+        <p>How many times did you see the <span id="targetPic"></span>?</p>
+        <p>Your answer: <input type="number" id="answer" value="0" size="1"/>
+          <input type="button" value="check" onclick="checkAnswer();"></p>
+      </div>
+    </div>
+  </body>
 </html>
-
-
